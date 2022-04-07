@@ -109,8 +109,8 @@ namespace SanShop.Api.Controllers
                 DateAdd = DateTime.Now,
                 ImageUrl = model.ImageUrl,
                 IsPromoted = model.IsPromoted,
-                DeliveryOptionsIds = model.DeliveryOptionsIds
-            };
+                DeliveryOptions = _service.GetDeliveryOptions().ToList()
+        };
         }
 
     }

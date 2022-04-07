@@ -25,23 +25,10 @@ namespace SanShop.Api.Services
 
         private List<Comment> _comments = new List<Comment>();
 
-        private List<ProductDelivery> _productDeliveries = new List<ProductDelivery>();
-
         public Product AddProduct(Product product)
         {
             _products.Add(product);
-            foreach (var doptId in product.DeliveryOptionsIds)
-            {
-                var dopt = new ProductDelivery
-                {
-                    Id = Helper.GetId(),
-                    ProductId = product.Id,
-                    DeliveryOptionId = doptId
-                };
 
-                _productDeliveries.Add(dopt);
-
-            }
             return product;
         }
 
@@ -59,8 +46,7 @@ namespace SanShop.Api.Services
         {
             var product = _products.FirstOrDefault(p => p.Id == id);
             product.Comments = _comments.Where(c => c.ProductId == product.Id).ToList();
-            var tableDeliveryIds = _productDeliveries.Where(pd => pd.ProductId == product.Id).Select(pd => pd.DeliveryOptionId).ToList();
-            product.DeliveryOptions = _deliveryOptions.Where(opt => tableDeliveryIds.Contains(opt.Id)).ToList();
+            product.DeliveryOptions = _deliveryOptions.ToList();
             return product;
         }
 

@@ -30,8 +30,6 @@ namespace SanShop.Common.Entities
                     return 0d;
             }
         }
-
-        public List<string> DeliveryOptionsIds { get; set; }
         public List<DeliveryOption> DeliveryOptions { get; set; }
     }
 }

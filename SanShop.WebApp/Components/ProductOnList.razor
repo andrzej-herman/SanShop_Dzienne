@@ -1,0 +1,19 @@
+﻿<div class="product-container">
+    <img src="@Product.ImageUrl" alt="product-img" class="product-img"/>
+    <div class="product-info">
+         <h2>@Product.Name</h2>
+         <h3>Cena: @Product.Price.ToString("#0.00") zł</h3>
+         <h4>Kategoria :@Category.Name</h4>
+    </div>
+   
+</div>
+
+@code {
+
+    [Parameter]
+    public Product Product { get; set; }
+
+    [Parameter]
+    public Category Category { get; set; }
+
+}

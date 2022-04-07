@@ -1,9 +1,57 @@
 ﻿@page "/"
+@inject HttpClient httpClient
 <PageTitle>Sklep internetowy SAN</PageTitle>
-<h1>Lista ofert</h1>
+<div class="container">
+    <h1>Lista ofert</h1>
+    <div class="product-list mt-4">
+        @if (Products != null && Categories != null)
+        {
+            if (Products.Any())
+            {
+                @foreach (var product in Products)
+                {
+                    <ProductOnList Product=@product Category=@Categories.FirstOrDefault(c => c.Id == product.CategoryId)/>
+                }
+            }
+            else
+            {
+                <div>Brak produktów w skelpie</div>
+            }
+        }
+    </div>
+
+</div>
+
 
 @code {
    
+    public List<Product> Products { get; set; }
+    public List<Category> Categories { get; set; }
+    public string ApiBaseAddress { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApiBaseAddress = httpClient.BaseAddress.ToString();
+        var address = $"{ApiBaseAddress}{"api/products"}";
+        var response = await httpClient.GetAsync(address);
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            Products = JsonConvert.DeserializeObject<List<Product>>(json);
+        }
+
+
+        ApiBaseAddress = httpClient.BaseAddress.ToString();
+        address = $"{ApiBaseAddress}{"api/categories"}";
+        response = await httpClient.GetAsync(address);
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            Categories = JsonConvert.DeserializeObject<List<Category>>(json);
+        }
+    }
+
+
 }
 
 

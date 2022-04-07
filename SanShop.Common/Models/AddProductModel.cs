@@ -15,6 +15,5 @@ namespace SanShop.Common.Models
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public bool IsPromoted { get; set; }
-        public List<string> DeliveryOptionsIds { get; set; }
     }
 }
