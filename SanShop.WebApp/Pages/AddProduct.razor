@@ -1,0 +1,15 @@
+﻿@inject HttpClient httpClient;
+@page "/addproduct"
+<PageTitle>Sklep internetowy SAN</PageTitle>
+<h1>Dodawanie produktu do sprzedaży</h1>
+<p>Adres bazowy API: @ApiBaseAddress</p>
+
+@code {
+        public string ApiBaseAddress { get; set; }
+
+        protected override void OnInitialized()
+        {
+            ApiBaseAddress = httpClient.BaseAddress.ToString();
+        }
+}
+
