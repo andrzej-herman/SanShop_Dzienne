@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SanShop.Api.Services;
 using SanShop.Common.Entities;
 using SanShop.Common.Models;
@@ -18,19 +19,14 @@ namespace SanShop.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public IActionResult Login(LoginModel model)
+        public LoginResult Login(LoginModel model)
         {
-            User user = null;
-            if (model.UserNameOrEmail.Contains("@"))
-                user = _service.LoginByEmail(model.UserNameOrEmail, model.Password);
-            else
-                user = _service.LoginByUserName(model.UserNameOrEmail, model.Password);
-
-            return user != null ? Ok(user) : BadRequest("Nieprawidłowy email lub hasło.");
+           return _service.Login(model.UserNameOrEmail, model.Password);
         }
 
         [HttpPost]
         [Route("register")]
+
         public IActionResult Register(RegisterModel model)
         {
             var result = _service.Register(model.UserName, model.Email, model.Password);
@@ -39,6 +35,7 @@ namespace SanShop.Api.Controllers
 
         [HttpGet]
         [Route("user")]
+        [Authorize]
         public IActionResult GetUserById([FromQuery] string userId)
         {
             var user = _service.GetUserById(userId);

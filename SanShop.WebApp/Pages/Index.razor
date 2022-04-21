@@ -19,9 +19,7 @@
             }
         }
     </div>
-
 </div>
-
 
 @code {
    
@@ -40,7 +38,6 @@
             Products = JsonConvert.DeserializeObject<List<Product>>(json);
         }
 
-
         ApiBaseAddress = httpClient.BaseAddress.ToString();
         address = $"{ApiBaseAddress}{"api/categories"}";
         response = await httpClient.GetAsync(address);
@@ -50,8 +47,6 @@
             Categories = JsonConvert.DeserializeObject<List<Category>>(json);
         }
     }
-
-
 }
 
 

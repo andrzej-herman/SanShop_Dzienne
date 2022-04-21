@@ -1,62 +1,65 @@
-﻿@inject HttpClient httpClient;
+﻿@page "/addproduct"
+@inject HttpClient httpClient;
 @inject NotificationService notificationService
-@page "/addproduct"
 <PageTitle>Sklep internetowy SAN</PageTitle>
-<h1>Dodawanie przedmiotu do sprzedaży</h1>
-<hr/>
-@if (CategoryNames != null)
-{
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
+<AuthorizeView Context="auth">
+    <Authorized>
+        <h1>Dodawanie przedmiotu do sprzedaży</h1>
+        <hr/>
+        @if (CategoryNames != null)
+        {
             <div class="row">
-                <div class="col-12">
-                    <h6>Wybierz kategorię przedmiotu</h6>
-                    <RadzenDropDown AllowClear="true" TValue="string" Class="w-100" 
-                    Data=@CategoryNames
-                    Change=@(args => OnChange(args, "DropDown")) />
-                </div>
-            </div>
-            <RadzenTemplateForm TItem="AddProductModel" Data=@Model Submit=@OnSubmit>
-            <div class="row mt-3">
+                <div class="col-3"></div>
                 <div class="col-6">
-                    <h6>Nazwa przedmiotu</h6>
-                    <RadzenTextBox style="display: block" Name="Name" @bind-Value=@Model.Name Class="w-100" />
-                    <RadzenRequiredValidator Component="Name" Text="Podaj nazwę przedmiotu" Popup="false" Style="position: absolute"/>
+                    <div class="row">
+                        <div class="col-12">
+                            <h6>Wybierz kategorię przedmiotu</h6>
+                            <RadzenDropDown AllowClear="true" TValue="string" Class="w-100" 
+                            Data=@CategoryNames
+                            Change=@(args => OnChange(args, "DropDown")) />
+                        </div>
+                    </div>
+                    <RadzenTemplateForm TItem="AddProductModel" Data=@Model Submit=@OnSubmit>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <h6>Nazwa przedmiotu</h6>
+                            <RadzenTextBox style="display: block" Name="Name" @bind-Value=@Model.Name Class="w-100" />
+                            <RadzenRequiredValidator Component="Name" Text="Podaj nazwę przedmiotu" Popup="false" Style="position: absolute"/>
+                        </div>
+                         <div class="col-3">
+                            <h6>Ilość</h6>
+                            <RadzenNumeric TValue="int" Min="1" Max="1000" @bind-Value="Model.Quantity" Class="w-100" />
+                        </div>
+                         <div class="col-3">
+                            <h6>Cena za szt.</h6>
+                            <RadzenTextBox style="display: block" Name="Price" @bind-Value=@Price Class="w-100" />
+                            <RadzenRequiredValidator Component="Price" Text="Podaj cenę przedmiotu" Popup="false" Style="position: absolute"/>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Opis przedmiotu</h6>
+                            <RadzenTextArea style="display: block" Name="Description" @bind-Value=@Model.Description Class="w-100" />
+                            <RadzenRequiredValidator Component="Description" Text="Podaj opis przedmiotu" Popup="false" Style="position: absolute"/>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <RadzenCheckBox Name="Promoted" @bind-Value=@Model.IsPromoted TValue="bool" />
+                            <RadzenLabel Text="Czy przedmiot będzie promowany" Component="Promoted" Style="margin-left: 8px; vertical-align: middle;" />
+                        </div>
+                    </div>
+                    <RadzenButton class="mt-5" Style="width: 100%!important" ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Submit" Text="Zapisz" ></RadzenButton>
+                    </RadzenTemplateForm>
                 </div>
-                 <div class="col-3">
-                    <h6>Ilość</h6>
-                    <RadzenNumeric TValue="int" Min="1" Max="1000" @bind-Value="Model.Quantity" Class="w-100" />
-                </div>
-                 <div class="col-3">
-                    <h6>Cena za szt.</h6>
-                    <RadzenTextBox style="display: block" Name="Price" @bind-Value=@Price Class="w-100" />
-                    <RadzenRequiredValidator Component="Price" Text="Podaj cenę przedmiotu" Popup="false" Style="position: absolute"/>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <h6>Opis przedmiotu</h6>
-                    <RadzenTextArea style="display: block" Name="Description" @bind-Value=@Model.Description Class="w-100" />
-                    <RadzenRequiredValidator Component="Description" Text="Podaj opis przedmiotu" Popup="false" Style="position: absolute"/>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <RadzenCheckBox Name="Promoted" @bind-Value=@Model.IsPromoted TValue="bool" />
-                    <RadzenLabel Text="Czy przedmiot będzie promowany" Component="Promoted" Style="margin-left: 8px; vertical-align: middle;" />
-                </div>
-            </div>
-            <RadzenButton class="mt-5" Style="width: 100%!important" ButtonStyle="ButtonStyle.Secondary" ButtonType="ButtonType.Submit" Text="Zapisz" ></RadzenButton>
-            </RadzenTemplateForm>
-        </div>
-        <div class="col-3"></div>
-    </div> 
-}
-
-
-
-
+                <div class="col-3"></div>
+            </div> 
+        }
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     public AddProductModel Model { get; set; } = new AddProductModel();

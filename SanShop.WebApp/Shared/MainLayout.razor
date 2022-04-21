@@ -1,11 +1,20 @@
-﻿@inherits LayoutComponentBase
-
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+<CascadingAuthenticationState>
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
     <main>
         <div class="top-row px-4 auth">
+            <AuthorizeView>
+                <Authorized>
+                    @context.User.Identity.Name
+                </Authorized>
+                <NotAuthorized>
+                    Użytkownik niezalogowany
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
         <article class="content px-4">
             @Body
@@ -13,3 +22,5 @@
         <RadzenNotification/>
     </main>
 </div>
+</CascadingAuthenticationState>
+

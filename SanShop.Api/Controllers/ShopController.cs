@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SanShop.Api.Services;
 using SanShop.Common.Entities;
 using SanShop.Common.Models;
@@ -18,73 +19,50 @@ namespace SanShop.Api.Controllers
 
         [HttpGet]
         [Route("categories")]
-        public IActionResult GetCategories()
+        public IEnumerable<Category> GetCategories()
         {
-            var categories = _service.GetCategories();
-            if (categories != null && categories.Any())
-                return Ok(categories);
-            else
-                return NoContent();
+            return _service.GetCategories();
         }
 
         [HttpGet]
         [Route("deliveries")]
-        public IActionResult GetDeliveryOptions()
+        public IEnumerable<DeliveryOption> GetDeliveryOptions()
         {
-            var options = _service.GetDeliveryOptions();
-            if (options != null && options.Any())
-                return Ok(options);
-            else
-                return NoContent();
+            return _service.GetDeliveryOptions();
         }
 
         [HttpGet]
         [Route("products")]
-        public IActionResult GetProducts()
+        public IEnumerable<Product> GetProducts()
         {
-            var products = _service.GetProducts();
-            if (products != null && products.Any())
-                return Ok(products);
-            else
-                return NoContent();
+            return _service.GetProducts();
         }
 
         [HttpGet]
         [Route("productsbycategory")]
-        public IActionResult GetProductsByCategory([FromQuery] string categoryId)
+        public IEnumerable<Product> GetProductsByCategory([FromQuery] string categoryId)
         {
-            var products = _service.GetProductsByCategory(categoryId);
-            if (products != null && products.Any())
-                return Ok(products);
-            else
-                return NoContent();
+            return _service.GetProductsByCategory(categoryId);
         }
 
         [HttpGet]
         [Route("product/{id}")]
-        public IActionResult GetProductById(string id)
+        public Product GetProductById(string id)
         {
-            var product = _service.GetProductById(id);
-            if (product != null)
-                return Ok(product);
-            else
-                return NoContent();
+            return _service.GetProductById(id);
         }
 
         [HttpGet]
         [Route("productbyid")]
-        public IActionResult GetProductByIdVer2([FromQuery] string id)
+        public Product GetProductByIdVer2([FromQuery] string id)
         {
-            var product = _service.GetProductById(id);
-            if (product != null)
-                return Ok(product);
-            else
-                return NoContent();
+            return _service.GetProductById(id);
         }
 
 
         [HttpPost]
         [Route("product")]
+        [Authorize]
         public IActionResult AddProduct(AddProductModel model)
         {
             var product = CreateProduct(model);
